@@ -109,3 +109,8 @@ func (e *encrypter) aesDecrypt(cipherText string) string {
 	cfbdec.XORKeyStream(plaintextCopy, cipherTextByte)
 	return string(plaintextCopy)
 }
+
+// return bool pointer
+func getBoolPointer(b bool) *bool {
+	return &b
+}

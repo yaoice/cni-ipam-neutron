@@ -40,7 +40,7 @@ type Store struct {
 // Store implements the Store interface
 var _ backend.Store = &Store{}
 
-func New(name string, ipamConfig *allocator.IPAMConfig) (*Store, error) {
+func New(name string, ipamConfig *allocator.IPAMConfig) (backend.Store, error) {
 	networkClient, err := connectStore(ipamConfig.OpenStackConf)
 	if err != nil {
 		return nil, err
@@ -68,6 +68,7 @@ func (s *Store) Reserve(id string) (*net.IPNet, net.IP, error) {
 	port, err := ports.Create(s.NetworkClient, ports.CreateOpts{
 		NetworkID: network.ID,
 		Name:      id,
+		AdminStateUp: getBoolPointer(true),
 	}).Extract()
 	if err != nil {
 		log.Printf("create neutron port %s err: %v", id, err.Error())
